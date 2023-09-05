@@ -11,7 +11,22 @@
 // </section>
 
 ?>
+<?php
+require_once ($_SERVER["DOCUMENT_ROOT"]) . "/src/model/connection.php";
 
+$pagina = 1;
+
+if(isset($_GET['pagina'])){
+$pagina = filter_input(INPUT_GET,"pagina",FILTER_VALIDATE_INT);}
+
+if(!$pagina){
+$pagina = 1;}
+
+$limite = 9;
+$inicio = ($pagina * $limite) - $limite;
+
+$result = $pdo->query("SELECT * FROM permissoes INNER JOIN usuario ON permissoes.id_permissao = usuario.id_permissoes ORDER BY id_usuario LIMIT $inicio, $limite")->fetchAll();
+?>
 <section>
     <div>
         <h1 class="flex text-3xl m-4">Permission List</h1>
@@ -37,27 +52,22 @@
                         <th class="border-2 p-2 border-gray-400 bg-slate-800 text-white">Actions</th>
                     </tr>
                 </thead>
-                <?php
-                require_once ($_SERVER["DOCUMENT_ROOT"]) . "/src/model/connection.php";
-                $result = $pdo->query("SELECT * FROM permissoes INNER JOIN usuario ON
-permissoes.id_permissao = usuario.id_permissoes");
-                ?>
                 <tbody>
-                    <?php while ($row = $result->fetch(PDO::FETCH_ASSOC)) { ?>
+                    <?php foreach ($result as $row) { ?>
                         <tr>
-                            <td class="border-2 p-2 border-gray-400 ">
+                            <td class="border-2 p-1 border-gray-400 ">
                                 <div class="flex justify-center"><?= $row['id_usuario']; ?></div>
                             </td>
-                            <td class="border-2 p-2 border-gray-400 ">
+                            <td class="border-2 p-1 border-gray-400 ">
                                 <div class="flex justify-center"><?= $row['email']; ?></div>
                             </td>
-                            <td class="border-2 p-2 border-gray-400 ">
+                            <td class="border-2 p-1 border-gray-400 ">
                                 <div class="flex justify-center"><?= $row['tipo']; ?></div>
                             </td>
-                            <td class="border-2 p-2 border-gray-400 ">
+                            <td class="border-2 p-1 border-gray-400 ">
                                 <div class="flex justify-center"><?= $row['status_user']; ?></div>
                             </td>
-                            <td class="border-2 p-2 border-gray-400">
+                            <td class="border-2 p-1 border-gray-400">
                                 <a href="#">
                                     <div class="flex justify-center">
                                         <span class="material-symbols-outlined text-blue-400">
@@ -67,11 +77,15 @@ permissoes.id_permissao = usuario.id_permissoes");
                                 </a>
                             </td>
                         </tr>
-                    <?php }
-
-                    ?>
+                    <?php } ?>
                 </tbody>
             </table>
+            <div>
+                <a href="/src/views/adm_menu.php?pagina=1"></a>
+                <a href="/src/views/adm_menu.php?pagina=<?= $pagina-1 ?>">primeita</a>
+                <?= $pagina ?>
+                <a href="/src/views/adm_menu.php?pagina=<?= $pagina+1 ?>">ultima</a>
+                <a href="/src/views/adm_menu.php"></a>
+            </div>
         </div>
     </div>
-</section>

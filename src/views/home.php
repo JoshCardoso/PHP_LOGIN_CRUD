@@ -85,9 +85,10 @@ if (!isset($_SESSION['permicao'])) {
                         </ul>
                     </div>
                 </nav>
+                <section>
+                    
                 <?php include('adm_menu.php') ?>
-                <footer>
-                </footer>
+                </section>
             </div>
         </div>
         

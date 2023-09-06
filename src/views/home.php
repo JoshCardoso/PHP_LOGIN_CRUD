@@ -2,7 +2,30 @@
 if (!isset($_SESSION['permicao'])) {
     header('location: ../index.php');
 } else {
+
+require_once ($_SERVER["DOCUMENT_ROOT"]) . "/src/model/connection.php";
+
+$pagina = 1;
+
+if(isset($_GET['pagina'])){
+$pagina = filter_input(INPUT_GET,"pagina",FILTER_VALIDATE_INT);}
+
+if(!$pagina){
+$pagina = 1;}
+
+$limite = 9;
+$inicio = ($pagina * $limite) - $limite;
+
+$registros = $pdo->query("SELECT COUNT(id_usuario) count FROM usuario")->fetch()["count"];
+$result = $pdo->query("SELECT * FROM permissoes INNER JOIN usuario ON permissoes.id_permissao = usuario.id_permissoes ORDER BY id_usuario LIMIT $inicio, $limite")->fetchAll();
+
+$paginas = ceil($registros/$limite);
+
+$pagDois = $pagina + 1;
+$pagoTres = $pagina
+
 ?>
+
     <!doctype html>
     <html>
 
@@ -19,7 +42,7 @@ if (!isset($_SESSION['permicao'])) {
             <div class="bg-slate-800 w-1/6">
                 <div class="w-[250px] h-[50px] flex items-center p-4 object-contain">
                     <img src="../../public/logo.jpg" alt="logo" class="w-[40px] h-[40px]  rounded-full shadow-sm ">
-                    <h1 class="text-white text-[23px] mx-3">Universidad</h1>
+                    <h1 class="text-white text-[15px] mx-3">Universidad</h1>
                 </div>
                 <div class=" flex flex-col border-slate-800 border-y-slate-600 border-2">
                     <h2 class="flex text-white p-2 mx-5 text-xl"><?= $_SESSION['user']['apelido']; ?></h2>
@@ -86,12 +109,76 @@ if (!isset($_SESSION['permicao'])) {
                     </div>
                 </nav>
                 <section>
-                    
-                <?php include('adm_menu.php') ?>
+                    <div>
+                        <h1 class="flex text-3xl m-4">Permission List</h1>
+                        <div class="w-[95%] mx-4 p-5 rounded-xl shadow-xl">
+                            <h2>Authorization Information</h2>
+                            <div class="flex justify-between">
+                                <div class="flex bg-slate-600 w-80 h-5">
+                                </div>
+                                <div>
+                                    <form action="">
+                                        <label for="seach">Seach: </label>
+                                        <input type="text" name="seach" id="seach">
+                                    </form>
+                                </div>
+                            </div>
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th class="border-2 p-2 border-gray-400 bg-slate-800 text-white">#</th>
+                                        <th class="border-2 p-2 border-gray-400 bg-slate-800 text-white">Email/Usuario</th>
+                                        <th class="border-2 p-2 border-gray-400 bg-slate-800 text-white">Permission</th>
+                                        <th class="border-2 p-2 border-gray-400 bg-slate-800 text-white">Status</th>
+                                        <th class="border-2 p-2 border-gray-400 bg-slate-800 text-white">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($result as $row) { ?>
+                                        <tr>
+                                            <td class="border-2 p-1 border-gray-400 ">
+                                                <div class="flex justify-center"><?= $row['id_usuario']; ?></div>
+                                            </td>
+                                            <td class="border-2 p-1 border-gray-400 ">
+                                                <div class="flex justify-center"><?= $row['email']; ?></div>
+                                            </td>
+                                            <td class="border-2 p-1 border-gray-400 ">
+                                                <div class="flex justify-center"><?= $row['tipo']; ?></div>
+                                            </td>
+                                            <td class="border-2 p-1 border-gray-400 ">
+                                                <div class="flex justify-center"><?= $row['status_user']; ?></div>
+                                            </td>
+                                            <td class="border-2 p-1 border-gray-400">
+                                                <a href="#">
+                                                    <div class="flex justify-center">
+                                                        <span class="material-symbols-outlined text-blue-400">
+                                                            edit_note
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                            <div class="flex justify-end my-2">
+                                
+                                <a class="flex justify-center mx-1 border-2 border-gray-400 px-2" href="/src/views/home.php?pagina=<?= $pagina - 1 ?>">Previous</a>
+                                
+                                <a class="flex justify-center mx-1 border-2 border-gray-400 w-8" href="/src/views/home.php?pagina=<?= $pagina ?>"><?= $pagina ?></a>
+
+                                <a class="flex justify-center mx-1 border-2 border-gray-400 w-8" href="/src/views/home.php?pagina=<?= $pagina + 1 ?>"><?= $pagina + 1?></a>
+
+                                <a class="flex justify-center mx-1 border-2 border-gray-400 w-8" href="/src/views/home.php?pagina=<?= $pagina + 2 ?>"><?= $pagina + 2 ?></a>
+
+                                <a class="flex justify-center mx-1 border-2 border-gray-400 px-2" href="/src/views/home.php?pagina=<?= $pagina + 1 ?>">Next</a>
+                            </div>
+                        </div>
+                    </div>
                 </section>
             </div>
         </div>
-        
+
     </body>
 
     </html>

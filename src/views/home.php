@@ -21,8 +21,10 @@ $result = $pdo->query("SELECT * FROM permissoes INNER JOIN usuario ON permissoes
 
 $paginas = ceil($registros/$limite);
 
+var_dump($paginas);
+
 $pagDois = $pagina + 1;
-$pagoTres = $pagina
+$pagoTres = $pagina + 2;
 
 ?>
 
@@ -163,15 +165,11 @@ $pagoTres = $pagina
                             </table>
                             <div class="flex justify-end my-2">
                                 
-                                <a class="flex justify-center mx-1 border-2 border-gray-400 px-2" href="/src/views/home.php?pagina=<?= $pagina - 1 ?>">Previous</a>
-                                
-                                <a class="flex justify-center mx-1 border-2 border-gray-400 w-8" href="/src/views/home.php?pagina=<?= $pagina ?>"><?= $pagina ?></a>
-
-                                <a class="flex justify-center mx-1 border-2 border-gray-400 w-8" href="/src/views/home.php?pagina=<?= $pagina + 1 ?>"><?= $pagina + 1?></a>
-
-                                <a class="flex justify-center mx-1 border-2 border-gray-400 w-8" href="/src/views/home.php?pagina=<?= $pagina + 2 ?>"><?= $pagina + 2 ?></a>
-
-                                <a class="flex justify-center mx-1 border-2 border-gray-400 px-2" href="/src/views/home.php?pagina=<?= $pagina + 1 ?>">Next</a>
+                                <a class="flex justify-center mx-1 border-2 border-gray-400 px-2" href="/src/views/home.php?pagina=1">First</a>
+                                <a class="flex justify-center mx-1 border-2 border-gray-400 w-8 " href="/src/views/home.php?pagina=<?= $pagina - 1?>">&lt;&lt;</a>
+                                <a class="flex justify-center mx-1 border-2 border-gray-400 w-8 " href="/src/views/home.php?pagina=<?= $pagina ?>"><?= $pagina?></a>
+                                <a class="flex justify-center mx-1 border-2 border-gray-400 w-8 " href="/src/views/home.php?pagina=<?= $pagina + 1?>">&gt;&gt;</a>
+                                <a class="flex justify-center mx-1 border-2 border-gray-400 px-2" href="/src/views/home.php?pagina=<?= $pagina2 ?>">Last</a>
                             </div>
                         </div>
                     </div>
